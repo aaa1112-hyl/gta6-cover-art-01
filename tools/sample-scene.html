@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1200" height="800"></canvas>
+<script>
+(function () {
+  var scene = new URLSearchParams(location.search).get('scene') || 'boulevard';
+  var cv = document.getElementById('c');
+  var ctx = cv.getContext('2d');
+  var W = 1200, H = 800;
+
+  function palm(x, y, s, color) {
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineCap = 'round';
+    ctx.lineWidth = 9;
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(14, -60, 34, -104); ctx.stroke();
+    ctx.lineWidth = 7;
+    for (var i = 0; i < 7; i++) {
+      var a = Math.PI * (0.08 + i * 0.14);
+      ctx.beginPath(); ctx.moveTo(34, -104);
+      ctx.quadraticCurveTo(34 + Math.cos(a) * 40, -104 - Math.sin(a) * 46, 34 + Math.cos(a) * 70, -104 - Math.sin(a) * 34 + 22);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function skyline(baseY, color, seed) {
+    var s = seed, x = -20;
+    function rnd() { s = (s * 1103515245 + 12345) & 0x7fffffff; return s / 0x7fffffff; }
+    ctx.fillStyle = color;
+    while (x < W + 20) {
+      var bw = 50 + rnd() * 110, bh = 90 + rnd() * 220;
+      ctx.fillRect(x, baseY - bh, bw, bh);
+      ctx.fillStyle = 'rgba(255,209,102,0.9)';
+      for (var wx = 8; wx < bw - 10; wx += 20) {
+        for (var wy = 12; wy < bh - 12; wy += 26) {
+          if (rnd() > 0.5) ctx.fillRect(x + wx, baseY - bh + wy, 8, 11);
+        }
+      }
+      ctx.fillStyle = color;
+      x += bw + 8 + rnd() * 26;
+    }
+  }
+
+  if (scene === 'boulevard') {
+    var sky = ctx.createLinearGradient(0, 0, 0, H);
+    sky.addColorStop(0, '#2b0f3d'); sky.addColorStop(0.45, '#c22a5e');
+    sky.addColorStop(0.72, '#ff7a3d'); sky.addColorStop(1, '#ffb347');
+    ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
+    var glow = ctx.createRadialGradient(760, 430, 20, 760, 430, 420);
+    glow.addColorStop(0, 'rgba(255,220,120,0.9)'); glow.addColorStop(1, 'rgba(255,122,61,0)');
+    ctx.fillStyle = glow; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#fff3c4';
+    ctx.beginPath(); ctx.arc(760, 430, 95, 0, Math.PI * 2); ctx.fill();
+    skyline(560, '#2a0a38', 41);
+    // Road with a warm reflection.
+    ctx.fillStyle = '#1c0b28'; ctx.fillRect(0, 560, W, 240);
+    var road = ctx.createLinearGradient(0, 560, 0, 800);
+    road.addColorStop(0, 'rgba(255,122,61,0.35)'); road.addColorStop(1, 'rgba(255,122,61,0)');
+    ctx.fillStyle = road; ctx.fillRect(0, 560, W, 240);
+    ctx.strokeStyle = '#ffd166'; ctx.lineWidth = 5; ctx.setLineDash([46, 34]);
+    ctx.beginPath(); ctx.moveTo(0, 690); ctx.lineTo(W, 690); ctx.stroke();
+    ctx.setLineDash([]);
+    palm(150, 560, 1.6, '#160627'); palm(1060, 570, 1.9, '#160627');
+    palm(420, 565, 1.1, '#160627'); palm(880, 560, 1.25, '#1e0a30');
+    // A lone car silhouette.
+    ctx.fillStyle = '#12041f';
+    ctx.beginPath();
+    ctx.moveTo(520, 640); ctx.lineTo(560, 606); ctx.lineTo(660, 600);
+    ctx.lineTo(710, 640); ctx.lineTo(700, 656); ctx.lineTo(530, 656); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.arc(565, 656, 16, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(672, 656, 16, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#ffd166';
+    ctx.beginPath(); ctx.arc(700, 632, 6, 0, Math.PI * 2); ctx.fill();
+  } else {
+    // Neon pier at night.
+    var nsky = ctx.createLinearGradient(0, 0, 0, H);
+    nsky.addColorStop(0, '#04020f'); nsky.addColorStop(0.55, '#1c0b45'); nsky.addColorStop(1, '#3b115f');
+    ctx.fillStyle = nsky; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    var s2 = 7;
+    function rnd2() { s2 = (s2 * 1103515245 + 12345) & 0x7fffffff; return s2 / 0x7fffffff; }
+    for (var i = 0; i < 90; i++) {
+      ctx.fillRect(rnd2() * W, rnd2() * 380, 2, 2);
+    }
+    ctx.fillStyle = '#ff5da2';
+    ctx.beginPath(); ctx.arc(920, 240, 60, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(255,93,162,0.35)';
+    ctx.beginPath(); ctx.arc(920, 240, 110, 0, Math.PI * 2); ctx.fill();
+    skyline(520, '#070213', 97);
+    // Ocean with neon reflections.
+    var sea = ctx.createLinearGradient(0, 520, 0, 800);
+    sea.addColorStop(0, '#120b3d'); sea.addColorStop(1, '#04020f');
+    ctx.fillStyle = sea; ctx.fillRect(0, 520, W, 280);
+    var cols = ['#00e5ff', '#ff2e88', '#ffd166'];
+    for (var k = 0; k < 26; k++) {
+      ctx.fillStyle = cols[k % 3];
+      ctx.globalAlpha = 0.25 + (k % 5) * 0.12;
+      ctx.fillRect(60 + (k * 43) % 1100, 540 + (k * 37) % 220, 60 + (k % 4) * 22, 4);
+    }
+    ctx.globalAlpha = 1;
+    // Pier planks + neon sign posts.
+    ctx.fillStyle = '#0d0620'; ctx.fillRect(0, 500, W, 26);
+    ctx.fillStyle = '#00e5ff'; ctx.fillRect(180, 380, 10, 120);
+    ctx.fillStyle = '#ff2e88'; ctx.fillRect(980, 360, 10, 140);
+    ctx.shadowColor = '#00e5ff'; ctx.shadowBlur = 26;
+    ctx.fillStyle = '#bff6ff'; ctx.fillRect(176, 376, 18, 8);
+    ctx.shadowColor = '#ff2e88';
+    ctx.fillStyle = '#ffd7ea'; ctx.fillRect(976, 356, 18, 8);
+    ctx.shadowBlur = 0;
+    palm(90, 505, 1.5, '#050214'); palm(1120, 505, 1.4, '#050214');
+  }
+  document.title = 'ready';
+})();
+</script></body></html>

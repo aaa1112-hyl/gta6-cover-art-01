@@ -1,0 +1,198 @@
+@font-face {
+  font-family: "Anton";
+  src: url("fonts/Anton-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+* { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  background: #14101d;
+  color: #f4eef7;
+  font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 22px;
+  background: linear-gradient(90deg, #2b0f3d, #7a1e4d 55%, #ff7a3d);
+  border-bottom: 3px solid #ffd166;
+}
+
+.brand {
+  font-family: "Anton", "Arial Narrow", sans-serif;
+  font-size: 26px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 2px 2px 0 #2b0f3d;
+}
+
+.brand-mark {
+  display: inline-block;
+  background: #ffd166;
+  color: #2b0f3d;
+  padding: 0 8px;
+  margin-right: 8px;
+  text-shadow: none;
+  transform: skewX(-8deg);
+}
+
+.topbar-note { font-size: 13px; color: #ffe9d6; }
+
+.workspace {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 18px;
+  padding: 18px 22px 28px;
+  align-items: start;
+}
+
+.panel {
+  background: #1e1830;
+  border: 1px solid #3a2d55;
+  border-radius: 12px;
+  padding: 18px;
+}
+
+.panel h2 {
+  margin: 0 0 14px;
+  font-family: "Anton", "Arial Narrow", sans-serif;
+  font-size: 20px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #ffd166;
+}
+
+.field { display: block; margin-bottom: 16px; }
+
+.field > span {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #c9b8e0;
+  margin-bottom: 6px;
+}
+
+.field input[type="text"], .field input[type="file"] {
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: 8px;
+  border: 1px solid #4a3a6b;
+  background: #241d3a;
+  color: #f4eef7;
+  font-size: 14px;
+}
+
+.field input[type="text"]:focus { outline: 2px solid #ff7a3d; }
+
+.hint { font-size: 12px; color: #a99ac4; margin: 6px 0 0; line-height: 1.5; }
+
+.seg { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.seg button {
+  flex: 1 1 auto;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #4a3a6b;
+  background: #241d3a;
+  color: #e8ddf5;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.seg button:hover { border-color: #ff7a3d; }
+
+.seg button.active {
+  background: #ff7a3d;
+  border-color: #ffd166;
+  color: #241023;
+  font-weight: 700;
+}
+
+.photo-list { display: flex; flex-wrap: wrap; gap: 8px; margin: -6px 0 12px; }
+
+.photo-list img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #4a3a6b;
+  cursor: pointer;
+}
+
+.photo-list img.selected { border-color: #ffd166; box-shadow: 0 0 0 2px #ff7a3d; }
+
+.slider-row label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.slider-row input[type="range"] { flex: 1; accent-color: #ff7a3d; }
+
+.export-btn {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #ff7a3d, #ff2e88);
+  color: #fff;
+  font-family: "Anton", "Arial Narrow", sans-serif;
+  font-size: 19px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #a3134f;
+}
+
+.export-btn:hover { filter: brightness(1.1); }
+.export-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #a3134f; }
+
+.preview-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.preview-head h2 { margin-bottom: 12px; }
+
+.size-label { font-size: 13px; color: #a99ac4; }
+
+.canvas-wrap {
+  display: flex;
+  justify-content: center;
+  background:
+    repeating-conic-gradient(#241d3a 0% 25%, #1a1428 0% 50%) 0 0 / 24px 24px;
+  border-radius: 10px;
+  padding: 14px;
+  min-height: 320px;
+}
+
+#coverCanvas {
+  max-width: 100%;
+  max-height: calc(100vh - 220px);
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+  cursor: grab;
+  touch-action: none;
+}
+
+#coverCanvas.dragging { cursor: grabbing; }
+
+@media (max-width: 900px) {
+  .workspace { grid-template-columns: 1fr; }
+}
