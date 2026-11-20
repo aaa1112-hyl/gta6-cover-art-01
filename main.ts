@@ -16,7 +16,7 @@ const shotsDir = join(repoRoot, 'screenshots');
 if (!existsSync(appDir)) throw new Error('missing app/ in ' + repoRoot);
 if (!existsSync(shotsDir)) throw new Error('missing screenshots/ in ' + repoRoot);
 
-rmSync(outputDir, { recursive: true, force: true });
+if (existsSync(outputDir)) for (const entry of readdirSync(outputDir)) rmSync(join(outputDir, entry), { recursive: true, force: true });
 mkdirSync(outputDir, { recursive: true });
 cpSync(appDir, join(outputDir, 'app'), { recursive: true });
 cpSync(shotsDir, join(outputDir, 'screenshots'), { recursive: true });
